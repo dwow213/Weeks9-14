@@ -11,6 +11,7 @@ public class KitClock : MonoBehaviour
 
     public GameObject bird;
     public AudioSource sound;
+    public int cuckooAmount;
 
     public float t;
     public int hour = 0;
@@ -56,10 +57,17 @@ public class KitClock : MonoBehaviour
 
     private IEnumerator PlayCuckooSound()
     {
-        sound.Play();
-        bird.SetActive(true);
-        yield return new WaitForSeconds(1);
-        bird.SetActive(false);
+        while (cuckooAmount < hour)
+        {
+            sound.Play();
+            cuckooAmount += 1;
+
+            bird.SetActive(true);
+            yield return new WaitForSeconds(1);
+            bird.SetActive(false);
+        }
+
+        cuckooAmount = 0;
     }
        
     public void StopTheClock()
