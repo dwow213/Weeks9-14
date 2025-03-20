@@ -9,6 +9,9 @@ public class KitClock : MonoBehaviour
     public Transform minuteHand;
     public float timeAnHourTakes = 5;
 
+    public GameObject bird;
+    public AudioSource sound;
+
     public float t;
     public int hour = 0;
 
@@ -47,6 +50,16 @@ public class KitClock : MonoBehaviour
             hour = 1;
         }
         OnTheHour.Invoke(hour);
+        Coroutine cuckoo = StartCoroutine(PlayCuckooSound());
+        yield return cuckoo;
+    }
+
+    private IEnumerator PlayCuckooSound()
+    {
+        sound.Play();
+        bird.SetActive(true);
+        yield return new WaitForSeconds(1);
+        bird.SetActive(false);
     }
        
     public void StopTheClock()
@@ -56,6 +69,7 @@ public class KitClock : MonoBehaviour
             StopCoroutine(clockIsRunning);
         }
         
+
         StopCoroutine(doOneHour);
     }
 }
