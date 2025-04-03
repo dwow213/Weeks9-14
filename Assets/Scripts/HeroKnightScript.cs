@@ -1,3 +1,4 @@
+using Cinemachine;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -9,6 +10,8 @@ public class HeroKnightScript : MonoBehaviour
 
     public List<AudioClip> footsteps;
     public AudioSource audSource;
+
+    public CinemachineImpulseSource impulse;
 
     // Start is called before the first frame update
     void Start()
@@ -34,12 +37,14 @@ public class HeroKnightScript : MonoBehaviour
 
         transform.position = pos;
 
-        
+
     }
 
     public void footstep()
     {
         audSource.clip = footsteps[Random.Range(0, 9)];
         audSource.Play();
+        impulse.GenerateImpulse();
+        Debug.Log("step");
     }
 }
