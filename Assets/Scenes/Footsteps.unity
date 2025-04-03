@@ -474,7 +474,7 @@ MonoBehaviour:
   - {fileID: 8300000, guid: 021b6876bcca9a84d90e982edffde28c, type: 3}
   - {fileID: 8300000, guid: e7bee4f7823b07747860fa834de03c99, type: 3}
   - {fileID: 8300000, guid: c2a4fd29502655340a8c220f82ec6ab5, type: 3}
-  audSource: {fileID: 0}
+  audSource: {fileID: 1240436192}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
