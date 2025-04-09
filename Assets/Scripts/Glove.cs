@@ -9,7 +9,8 @@ public class Glove : MonoBehaviour
     bool whiteGlove;
     //float for time left to press correctly
     float timer;
-    GameObject changingGlove;
+    public bool pressable;
+    public GameObject cosmeticGlove;
     
     // Start is called before the first frame update
     void Start()

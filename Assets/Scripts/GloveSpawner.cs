@@ -44,6 +44,9 @@ public class GloveSpawner : MonoBehaviour
             pos.y = Random.Range(-3, 3);
             gloveObj.transform.position = pos;
 
+            //make this glove object pressable for the player
+            gloveObj.GetComponent<Glove>().pressable = true;
+
             //randomly decide if it's a white or red glove (50%)
             //picks a white glove
             if (Random.Range(0, 2) == 0)
@@ -56,8 +59,17 @@ public class GloveSpawner : MonoBehaviour
                 gloveObj.GetComponent<SpriteRenderer>().sprite = images[1];
             }
 
+            //make a glove that is not pressable and is purely cosmetic 
+            GameObject cosmeticGlove = gloveObj;
+            cosmeticGlove.GetComponent<Glove>().pressable = false;
+            //link the cosmetic glove to the glove obj 
+            gloveObj.GetComponent<Glove>().cosmeticGlove = cosmeticGlove;
+
+
             //add the glove to the array list
             gloves.Add(gloveObj);
+
+            Instantiate(cosmeticGlove);
             yield return new WaitForSecondsRealtime(2 - combo * 0.1f);
         }
     }
