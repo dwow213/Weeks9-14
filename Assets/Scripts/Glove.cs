@@ -26,11 +26,13 @@ public class Glove : MonoBehaviour
     bool qPressed;
     bool ePressed;
 
+    
+
     // Start is called before the first frame update
     void Start()
     {
+        //timer runs out after 5 seconds
         timer = 5;
-        //StartCoroutine(DecreaseTimer());
     }
 
     // Update is called once per frame
@@ -46,8 +48,6 @@ public class Glove : MonoBehaviour
 
         //decrease timer by 1 every second
         timer -= 1 * Time.deltaTime;
-
-        Debug.Log(timer);
 
         //get the position of the mouse
         Vector2 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
@@ -130,5 +130,12 @@ public class Glove : MonoBehaviour
             mousePressed = false;
         }
 
+    }
+
+    //function that destroys the cosmetic glove then itself
+    public void destroyGlove()
+    {
+        Destroy(cosmeticGlove);
+        Destroy(gameObject);
     }
 }

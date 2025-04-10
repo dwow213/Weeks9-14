@@ -14,6 +14,8 @@ public class GloveSpawner : MonoBehaviour
     //reference the life and score scipt
     public GameObject LifeAndScore;
 
+    //coroutine that will hold the one that spawns gloves
+    Coroutine spawningGloves;
     //list that holds all the gloves
     public List<GameObject> gloves = new List<GameObject>();
     //list that holds the images for the gloves (could just be an array but whatever)
@@ -28,12 +30,14 @@ public class GloveSpawner : MonoBehaviour
     //int variable that handles combo
     public int combo;
 
+    
+
 
     // Start is called before the first frame update
     void Start()
     {
         //start a coroutine that spawns gloves
-        StartCoroutine(SpawnGlove());
+        spawningGloves = StartCoroutine(SpawnGlove());
 
         //add functions to failure
         failure.AddListener(clearGloves);
@@ -42,14 +46,13 @@ public class GloveSpawner : MonoBehaviour
 
         //add functions to success
         success.AddListener(increaseScore);
-        success.AddListener(removeGlove);
         success.AddListener(increaseCombo);
+        success.AddListener(removeGlove);
     }
 
     // Update is called once per frame
     void Update()
     {
-
         //if there are at least two gloves in the glove list
         if (gloves.Count > 1)
         {
@@ -69,6 +72,9 @@ public class GloveSpawner : MonoBehaviour
             }
         }
 
+        //add the first glove's function of destroying itself to the success event
+        success.AddListener(gloves[0].GetComponent<Glove>().destroyGlove);
+
         //if the first glove had been clicked by mouse and is a white glove, invoke success event
         //(the bulk of this check has already been done in the glove script)
         if (gloves[0].GetComponent<Glove>().whitePressed)
@@ -76,13 +82,15 @@ public class GloveSpawner : MonoBehaviour
             success.Invoke();
         }
 
-        //if the first glove had been pressed, invoke success event
+        //if the first glove had been pressed with q or e
         if (gloves[0].GetComponent<Glove>().redPressed)
         {
+            //if the glove is not white (red glove), invoke success event
             if (!gloves[0].GetComponent<Glove>().whiteGlove)
             {
                 success.Invoke();
             }
+            //if the glove is white, invoke failure event
             else
             {
                 failure.Invoke();
@@ -96,14 +104,16 @@ public class GloveSpawner : MonoBehaviour
             failure.Invoke();
         }
 
+        //if the glove's timer reaches 0, invoke failure event
         if (gloves[0].GetComponent<Glove>().timer <= 0)
         {
             failure.Invoke();
+        }
 
-            if (LifeAndScore.GetComponent<LifeAndScoreScript>().life <= 1)
-            {
-                failure.AddListener(stopGame);
-            }
+        //if amount of lives reach 1, add a function that stops the game to the failure event
+        if (LifeAndScore.GetComponent<LifeAndScoreScript>().life <= 1)
+        {
+            failure.AddListener(stopGame);
         }
 
     }
@@ -172,10 +182,11 @@ public class GloveSpawner : MonoBehaviour
         //for loop that destroys every glove object and their cosmetic glove
         for (int i = 0; i < gloves.Count; i++)
         {
-            Destroy(gloves[i].GetComponent<Glove>().cosmeticGlove);
-            Destroy(gloves[i]);
+            //uses a function of the glove that destroys it
+            gloves[i].GetComponent<Glove>().destroyGlove();
         }
 
+        //clears the list of gloves
         gloves.Clear();
     }
 
@@ -193,7 +204,7 @@ public class GloveSpawner : MonoBehaviour
     //function that stops the game when losing
     public void stopGame()
     {
-        StopCoroutine(SpawnGlove());
+        StopCoroutine(spawningGloves);
     }
 
     //function that increases score
@@ -211,8 +222,7 @@ public class GloveSpawner : MonoBehaviour
     //function that removes the first glove in the list
     public void removeGlove()
     {
-        Destroy(gloves[0].GetComponent<Glove>().cosmeticGlove);
-        Destroy(gloves[0]);
         gloves.RemoveAt(0);
     }
+        
 }
