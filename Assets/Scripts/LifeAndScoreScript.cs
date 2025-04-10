@@ -27,4 +27,5 @@ public class LifeAndScoreScript : MonoBehaviour
         lifeText.text = "Lives: " + life;
         scoreText.text = "Score: " + score;
     }
+
 }
