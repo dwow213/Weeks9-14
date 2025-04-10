@@ -271,8 +271,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   life: 0
   score: 0
-  lifeText: {fileID: 0}
-  scoreText: {fileID: 0}
+  lifeText: {fileID: 1777725436}
+  scoreText: {fileID: 1068391738}
 --- !u!1 &1068391736
 GameObject:
   m_ObjectHideFlags: 0

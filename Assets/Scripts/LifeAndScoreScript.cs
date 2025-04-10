@@ -1,8 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
-using UnityEditor.UI;
 using UnityEngine;
 using UnityEngine.SocialPlatforms.Impl;
+using UnityEngine.UI;
+using TMPro;
 
 public class LifeAndScoreScript : MonoBehaviour
 {
@@ -10,8 +11,8 @@ public class LifeAndScoreScript : MonoBehaviour
     public int life;
     public int score;
 
-    public UnityEditor.UI.TextEditor lifeText;
-    public TextMesh scoreText;
+    public TextMeshProUGUI lifeText;
+    public TextMeshProUGUI scoreText;
     
     // Start is called before the first frame update
     void Start()
