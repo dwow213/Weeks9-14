@@ -7,6 +7,8 @@ public class GloveSpawner : MonoBehaviour
 {
     //glove prefab 
     public GameObject prefab;
+    //cosmetic glove prefab
+    public GameObject cosmeticPrefab;
     //list that holds all the gloves
     public List<GameObject> gloves = new List<GameObject>();
     //list that holds the images for the gloves (could just be an array but whatever)
@@ -27,7 +29,10 @@ public class GloveSpawner : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+        if (gloves[0].GetComponent<Glove>().timer <= 0) 
+        {
+            failure.Invoke();
+        }
     }
 
     //coroutine that spawns gloves
@@ -59,17 +64,22 @@ public class GloveSpawner : MonoBehaviour
                 gloveObj.GetComponent<SpriteRenderer>().sprite = images[1];
             }
 
-            //make a glove that is not pressable and is purely cosmetic 
-            GameObject cosmeticGlove = gloveObj;
-            cosmeticGlove.GetComponent<Glove>().pressable = false;
-            //link the cosmetic glove to the glove obj 
-            gloveObj.GetComponent<Glove>().cosmeticGlove = cosmeticGlove;
 
+            //make a glove that is not pressable and is purely cosmetic and instantiate it
+            GameObject cosmeticGlove = Instantiate(cosmeticPrefab);
+
+            //set its position and sprite to the same as the glove obj 
+            cosmeticGlove.transform.position = pos;
+            cosmeticGlove.GetComponent<SpriteRenderer>().sprite = gloveObj.GetComponent<SpriteRenderer>().sprite;
+
+            //connect the cosmetic glove and the glove object
+            gloveObj.GetComponent<Glove>().cosmeticGlove = cosmeticGlove;
 
             //add the glove to the array list
             gloves.Add(gloveObj);
 
-            Instantiate(cosmeticGlove);
+
+            ;
             yield return new WaitForSecondsRealtime(2 - combo * 0.1f);
         }
     }
