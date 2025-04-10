@@ -49,25 +49,6 @@ public class GloveSpawner : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (gloves[0].GetComponent<Glove>().timer <= 0) 
-        {
-            failure.Invoke();
-
-            if (LifeAndScore.GetComponent<LifeAndScoreScript>().life == 0)
-            {
-                failure.AddListener(stopGame);
-            }
-        }
-
-        if (gloves[0].GetComponent<Glove>().pressed == true)
-        {
-            success.Invoke();
-        }
-
-        if (gloves[0].GetComponent<Glove>().failed == true)
-        {
-            failure.Invoke();
-        }
 
         //if there are at least two gloves in the glove list
         if (gloves.Count > 1)
@@ -75,13 +56,56 @@ public class GloveSpawner : MonoBehaviour
             //for loop that goes through each glove except the first one in the glove list
             for (int i = 1; i < gloves.Count; i++)
             {
-                if (gloves[i].GetComponent<Glove>().pressed || gloves[i].GetComponent<Glove>().failed)
+                //set all gloves "redPressed" and "redFailed" variables to false
+                //(resets them in case "q" or "e" was pressed since all gloves will register that, despite not being first nor a red glove)
+                gloves[i].GetComponent<Glove>().redPressed = false;
+                gloves[i].GetComponent<Glove>().redFailed = false;
+
+                //if a white glove has been pressed incorrectly or a red glove was clicked by mouse, invoke failure event
+                if ((gloves[i].GetComponent<Glove>().whitePressed || gloves[i].GetComponent<Glove>().whiteFailed))
                 {
                     failure.Invoke();
                 }
             }
         }
-  
+
+        //if the first glove had been clicked by mouse and is a white glove, invoke success event
+        //(the bulk of this check has already been done in the glove script)
+        if (gloves[0].GetComponent<Glove>().whitePressed)
+        {
+            success.Invoke();
+        }
+
+        //if the first glove had been pressed, invoke success event
+        if (gloves[0].GetComponent<Glove>().redPressed)
+        {
+            if (!gloves[0].GetComponent<Glove>().whiteGlove)
+            {
+                success.Invoke();
+            }
+            else
+            {
+                failure.Invoke();
+            }
+            
+        }
+
+        //if the first glove was failed, invoke failure event
+        if (gloves[0].GetComponent<Glove>().whiteFailed || gloves[0].GetComponent<Glove>().redFailed)
+        {
+            failure.Invoke();
+        }
+
+        if (gloves[0].GetComponent<Glove>().timer <= 0)
+        {
+            failure.Invoke();
+
+            if (LifeAndScore.GetComponent<LifeAndScoreScript>().life <= 1)
+            {
+                failure.AddListener(stopGame);
+            }
+        }
+
     }
 
     //coroutine that spawns gloves
@@ -109,7 +133,7 @@ public class GloveSpawner : MonoBehaviour
             //makes it a red glove
             else
             {
-                gloveObj.GetComponent<Glove>().whiteGlove = true;
+                gloveObj.GetComponent<Glove>().whiteGlove = false;
                 gloveObj.GetComponent<SpriteRenderer>().sprite = images[1];
             }
 
